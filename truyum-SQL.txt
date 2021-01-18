@@ -1,0 +1,103 @@
+1.Create table menu_item_list:
+
+	CREATE TABLE 'truyum-schema'.'menu_item_list' (
+  		'menu_item_id' INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  		'name' VARCHAR(45) NOT NULL,
+  		'price' DECIMAL(8,2) NOT NULL,
+  		'active' VARCHAR(5) NOT NULL,
+ 		'date_of_launch' DATE NOT NULL,
+  		'category' VARCHAR(20) NOT NULL,
+  		'free_delivery' VARCHAR(5) NOT NULL,
+ 		 PRIMARY KEY ('menu_item_id')
+		);
+
+
+1. a.) Inserting values into menu_item_list:
+
+
+	insert into menu_item_list (menu_item_id,name,price,active,date_of_launch,category,free_delivery) values
+	(1,"Sandwich",99.00,"Yes","2017-03-05","Main Course","Yes"),
+	(2,"Burger",129.00,"Yes","2017-12-23","Main Course","No"),
+	(3,"Pizza",149.00,"Yes","2017-08-21","Main Course","No"),
+	(4,"French Fries",57.00,"No","2017-07-02","Starters","Yes"),
+	(5,"Chocolate Brownie",32.00,"Yes","2022-11-02","Dessert","Yes");
+
+1. b.)  Query to get all menu items from menu_item_list:
+
+	select * from menu_item_list m;
+
+
+2. View Menu Item List Customer:
+
+a.) SQL query to get all menu items which after launch date and is active.
+
+	select menu_item_id,name,price,category,free_delivery from menu_item_list where date_of_launch<CURDATE() and active="Yes";
+
+
+3. Edit Menu Item:
+
+a.) SQL query to get all menu items based on Menu Item Id:
+
+	SELECT * FROM menu_item_list where menu_item_id="2";
+
+b.) Frame update SQL menu_items table to update all the columns values based on Menu Item Id:
+
+	update menu_item_list set name="Garlic Bread",price=150.00,active="Yes",date_of_launch="2020-11-24",
+		category="Main Course",free_delivery="Yes" where menu_item_id="4";
+
+4. Create Users table:
+	CREATE TABLE 'truyum-schem'.'users' (
+  		'user_id' INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  		'user_name' VARCHAR(45) NOT NULL,
+		'user_type' VARCHAR(15) NOT NULL DEFAULT 'customer',
+ 		 PRIMARY KEY ('user_id')
+		);
+
+   Create Cart table:
+	
+	CREATE TABLE `truyum-schema`.`cart` (
+  		`user_id` INTEGER UNSIGNED NOT NULL,
+  		`menu_item_id` INTEGER UNSIGNED NOT NULL,
+  		`name` VARCHAR(45) NOT NULL,
+  		`price` DECIMAL(8,2) NOT NULL,
+  		`free_delivery` VARCHAR(5) NOT NULL,
+  		`quantity` INTEGER UNSIGNED NOT NULL,
+ 		 PRIMARY KEY (`user_id`, `menu_item_id`),
+ 		 CONSTRAINT `user_id` FOREIGN KEY `user_id` (`user_id`)
+    		 REFERENCES `users` (`user_id`)
+  		 CONSTRAINT `menu_item_id` FOREIGN KEY `menu_item_id` (`menu_item_id`)
+  		 REFERENCES `menu_item_list` (`menu_item_id`)
+  		);
+
+a.) Frame insert scripts for adding data into user and cart tables.In user table create two users. Once user will not have any entries in cart, 
+   while the other will have at least 3 items in the cart.
+
+	insert into users (user_id,user_name,user_type) values (001,"John","customer"),(002,"Smith","customer");
+
+	insert into cart (user_id,menu_item_id,name,price,free_delivery,quantity) values
+	(001,1,"Sandwich",99.00,"Yes",1),
+	(001,2,"Burger",129.00,"No",1),
+	(001,5,"Chocolate Brownie",32.00,"Yes",1);
+
+5. View Cart:
+
+a.) Frame SQL query to get all menu items in a particular user’s cart:
+
+	select name,price,free_delivery,quantity from cart where user_id="1";
+
+b.) Frame SQL query to get the total price of all menu items in a particular user’s cart:
+
+	select sum(price) from cart where user_id="1";
+
+6. Remove Item from Cart:
+
+a.) Frame SQL query to remove a menu items from Cart based on User Id and Menu Item Id:
+
+	delete from cart where menu_item_id="1" and user_id="1";
+
+
+
+	
+	
+
+
